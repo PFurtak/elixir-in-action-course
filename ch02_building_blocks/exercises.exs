@@ -31,12 +31,40 @@ IO.puts(aircraft)
 
 # Atoms
 # TODO: create some atoms and inspect them with `is_atom/1`
+# Best use is for named constants, ie. variable = :some_atom
+:an_atom
+:red_chili
+:"atom using spaces"
+
+# An atom can be aliased by omitting the :, ie "AnAtom" is then called by Elixir.AnAtom
+AnAtom
+# true
+AnAtom == :"Elixir.AnAtom" |> IO.puts()
 
 # Tuples
 # TODO: create a {status, value} tuple and pattern-match it
+# Best used for small fixed sized number of elements, dynamically sized collections use lists
+person = {"Patrick", 36}
+age = elem(person, 1) |> IO.puts()
+name = elem(person, 0) |> IO.puts()
+# creates new tuple w/ the new value (use IO.inspect() for printing values other than strings)
+birthday_increment = put_elem(person, 1, 37) |> IO.inspect()
+# original tuple left unmodified
+IO.inspect(person)
 
 # Lists
 # TODO: create a list, use hd/1, tl/1, and Enum.at/2
+# Work like singly linked lists and must be traversed
+# O(n) operations for most like length()
+best_final_fantasies = [6, 7, 10, 16]
+# 4
+length(best_final_fantasies) |> IO.puts()
+# 7, index starts at 0
+my_favorite = Enum.at(best_final_fantasies, 1) |> IO.puts()
+# false
+(8 in best_final_fantasies) |> IO.puts()
+# [6, 7, 10, 15]
+update_bests = List.replace_at(best_final_fantasies, 3, 15) |> IO.inspect()
 
 # Maps
 # TODO: create a map, access a key with map.key and map[:key]
