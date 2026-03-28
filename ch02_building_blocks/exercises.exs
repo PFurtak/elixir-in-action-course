@@ -35,11 +35,21 @@ IO.puts(aircraft)
 :an_atom
 :red_chili
 :"atom using spaces"
+is_atom(:red_chili) |> IO.puts()
 
 # An atom can be aliased by omitting the :, ie "AnAtom" is then called by Elixir.AnAtom
 AnAtom
 # true
 AnAtom == :"Elixir.AnAtom" |> IO.puts()
+
+# Strings
+string1 = "this is a string"
+embedded_expression = "Pie = #{3 + 0.14}"
+# escape character is \
+alt_syntax = ~s("This is called a sigil" and can contain quotes) |> IO.puts()
+alt_sigil = ~S(Capital S will not interpolate or escape. #{ 3 + 0.14 } \\n) |> IO.puts()
+# Concat w/ <> operator
+("Final" <> " " <> "Fantasy" <> " " <> "VII") |> IO.puts()
 
 # Tuples
 # TODO: create a {status, value} tuple and pattern-match it
@@ -89,6 +99,19 @@ Map.fetch(squares, 4) |> IO.inspect()
 # Map.fetch!(squares, 4) returns (KeyError)
 # store a new element via Map.put/3
 squares = Map.put(squares, 4, 16) |> IO.inspect()
+# Use atoms as keys, shorter syntax:
+patrick = %{name: "Patrick", age: 36, works_at: "cpanel"}
+IO.puts(patrick[:age])
+IO.puts(patrick.works_at)
+acquired = %{patrick | age: 37, works_at: "Webpros"}
+IO.inspect(acquired)
+
+# Time and Dates:
+# create a dat w/ ~D(YYYY/MM/DD)
+today = ~D[2026-03-28]
+today.year |> IO.puts()
+today.month |> IO.puts()
+today.day |> IO.puts()
 
 # ---------------------------------------------------------------------------
 # 2.3 Modules and functions
@@ -118,6 +141,16 @@ end
 Calculator.double(6) |> IO.puts()
 
 # Calculator.sum(3, 9) |> IO.puts() #UndefinedFunctionError because private function called outside of module.
+
+# Anon functions:
+anon_square_print = fn x ->
+  (x * x) |> IO.puts()
+end
+
+anon_square_print.(7)
+
+print_el = fn x -> IO.puts(x) end
+Enum.each([1, 2, 3, 4], print_el)
 
 # Import & alias allows you to shorthand module calls.
 # Import example:
