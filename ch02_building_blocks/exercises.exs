@@ -44,6 +44,7 @@ AnAtom == :"Elixir.AnAtom" |> IO.puts()
 # Tuples
 # TODO: create a {status, value} tuple and pattern-match it
 # Best used for small fixed sized number of elements, dynamically sized collections use lists
+# Modifying a tuple always creates a shallow copy. rebinding makes the old values garbage collectable
 person = {"Patrick", 36}
 age = elem(person, 1) |> IO.puts()
 name = elem(person, 0) |> IO.puts()
@@ -65,9 +66,29 @@ my_favorite = Enum.at(best_final_fantasies, 1) |> IO.puts()
 (8 in best_final_fantasies) |> IO.puts()
 # [6, 7, 10, 15]
 update_bests = List.replace_at(best_final_fantasies, 3, 15) |> IO.inspect()
+# concat lists with ++ operator
+([1, 2, 3] ++ [4, 5, 6] ++ [7, 8, 9]) |> IO.inspect()
+# IMPORTANT NOTE: LISTS ARE A RECURSIVE COLLECTION OF HEAD and TAIL PAIRS:
+[1 | [2 | [3 | []]]] == [1, 2, 3]
 
 # Maps
 # TODO: create a map, access a key with map.key and map[:key]
+# Dynamic empty map:
+%{}
+squares = %{1 => 1, 2 => 4, 3 => 9} |> IO.inspect()
+new_up_squares = Map.new([{1, 1}, {2, 4}, {3, 9}]) |> IO.inspect()
+IO.inspect(squares[2])
+IO.inspect(squares[4])
+# Can also access via Map.get/2 | Map.get/3 allows you to define a default value if return is nil:
+Map.get(squares, 2) |> IO.puts()
+Map.get(squares, 4, :not_found) |> IO.puts()
+# Map.fetch to test if an element exists:
+Map.fetch(squares, 1) |> IO.inspect()
+Map.fetch(squares, 4) |> IO.inspect()
+# Raise an exception if the element does not exist, continue if it does
+# Map.fetch!(squares, 4) returns (KeyError)
+# store a new element via Map.put/3
+squares = Map.put(squares, 4, 16) |> IO.inspect()
 
 # ---------------------------------------------------------------------------
 # 2.3 Modules and functions
