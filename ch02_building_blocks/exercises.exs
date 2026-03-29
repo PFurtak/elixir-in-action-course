@@ -31,6 +31,11 @@ IO.puts(aircraft)
 
 # Atoms
 # TODO: create some atoms and inspect them with `is_atom/1`
+# An atom is a named constant whose value IS its name. They are not strings —
+# there is no underlying text being stored. The runtime keeps a global atom table,
+# and every reference to :foo points to the same entry in that table, making
+# equality checks O(1) pointer comparisons instead of character-by-character string compares.
+# Because of this, atoms are never garbage collected — avoid creating them dynamically at runtime.
 # Best use is for named constants, ie. variable = :some_atom
 :an_atom
 :red_chili
@@ -107,11 +112,20 @@ acquired = %{patrick | age: 37, works_at: "Webpros"}
 IO.inspect(acquired)
 
 # Time and Dates:
-# create a dat w/ ~D(YYYY/MM/DD)
+# create a date w/ ~D[YYYY/MM/DD]
 today = ~D[2026-03-28]
 today.year |> IO.puts()
 today.month |> IO.puts()
 today.day |> IO.puts()
+
+# create time w/ ~T[HR/MM/S/MS]
+time = ~T[05:29:08.0023]
+
+time.hour |> IO.puts()
+time.minute |> IO.puts()
+time.second |> IO.puts()
+# microsecond returns a tuple, {value, percision}. example = {2300, 4}
+time.microsecond |> IO.inspect()
 
 # ---------------------------------------------------------------------------
 # 2.3 Modules and functions
@@ -207,3 +221,37 @@ double = fn x -> x * 2 end
 IO.inspect(double.(5))
 
 # TODO: use Enum.map/2 to double every element in a list
+
+# ---------------------------------------------------------------------------
+# 2.5 Operators
+# ---------------------------------------------------------------------------
+
+# Arithmetic: +, -, *, /
+# / always returns a float
+IO.inspect(10 / 2)
+
+# Integer division and remainder:
+IO.inspect(div(10, 3))
+IO.inspect(rem(10, 3))
+
+# Comparison: ==, !=, ===, !==, <, >, <=, >=
+# === is strict equality (also checks type)
+IO.inspect(1 == 1.0)
+IO.inspect(1 === 1.0)
+
+# Logical: and, or, not (boolean only), &&, ||, ! (any truthy value)
+IO.inspect(true and false)
+IO.inspect(nil || :fallback)
+IO.inspect(!nil)
+
+# String concatenation: <>
+IO.inspect("Hello" <> ", " <> "world")
+
+# List concatenation/subtraction: ++, --
+IO.inspect([1, 2, 3] ++ [4, 5])
+IO.inspect([1, 2, 3, 2] -- [2])
+
+# Pipe operator |> passes the left-hand value as the first argument to the right
+"hello world"
+|> String.upcase()
+|> IO.puts()
