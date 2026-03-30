@@ -43,13 +43,67 @@ end
 IO.inspect(Factorial.of(5))
 IO.inspect(Factorial.of(0))
 
+# Multiclause
+defmodule Geometry do
+  def area({:square, a}) do
+    a * a
+  end
+
+  def area({:rectangle, a, b}) do
+    a * b
+  end
+
+  def area({:circle, r}) do
+    r * r * 3.14
+  end
+
+  # default clause, must be last as the arguments
+  # are checked top to bottom during runtime
+  def area(unknown) do
+    {:error, {:unknown_shape, unknown}}
+  end
+end
+
+Geometry.area({:square, 5}) |> IO.puts()
+Geometry.area({:rectangle, 3, 5}) |> IO.puts()
+Geometry.area({:circle, 7}) |> IO.puts()
+Geometry.area({:hexagon, 8}) |> IO.inspect()
+
+# Guards
+# 'when' after the argument list is a clause.
+# This conditional must be satisfied to pattern match.
+# '<' and '>' can evaluate types that are not numbers,
+# it will compare a string to bit value; thus causing :positive
+# return of any non number. is_number() is an additional guard
+# against this.
+defmodule TestNum do
+  def test(num) when not is_number(num) do
+    {:error, :not_a_number, num}
+  end
+
+  def test(num) when num < 0 do
+    :negative
+  end
+
+  def test(num) when num === 0 do
+    :zero
+  end
+
+  def test(num) when num > 0 do
+    :positive
+  end
+end
+
+TestNum.test(-6) |> IO.puts()
+TestNum.test(0) |> IO.puts()
+TestNum.test(4) |> IO.puts()
+TestNum.test("yolo") |> IO.inspect()
+
 # ---------------------------------------------------------------------------
 # 3.3 case, cond, if
 # ---------------------------------------------------------------------------
 
 # TODO: rewrite Factorial using a case expression instead of multiple clauses
-
-
 
 # ---------------------------------------------------------------------------
 # 3.4 The pipe operator
@@ -69,8 +123,6 @@ IO.inspect(result)
 # ---------------------------------------------------------------------------
 
 # TODO: use a for comprehension to produce a multiplication table
-
-
 
 # ---------------------------------------------------------------------------
 # 3.6 Recursion
